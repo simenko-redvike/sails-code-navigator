@@ -30,11 +30,7 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
       return defaultDefinitions;
     }
 
-    const customDefinition = this.findCustomDefinition(document, position);
-
-    if (customDefinition) {
-      return customDefinition;
-    }
+    return this.findCustomDefinition(document, position);
   }
 
   private loadDefinitions(definitionPaths: Array<string>) {
@@ -57,10 +53,13 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
             path.join(directoryPath, file)
           );
         });
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(`SailsCodeNavigator: error loading definitions from ${definitionPath}: ${(error as Error).message}.`);
       }
     });
+    console.log(
+      `SailsCodeNavigator: loaded ${this.definitionModules.size} definitions.`
+    );
   }
 
   private findCustomDefinition(
@@ -78,7 +77,15 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
     }: { objectName: string | undefined; propertyName: string | undefined } =
       this.getIdentifiersToDefine(range, document);
 
-    return this.findDefinitionLocation(objectName, propertyName);
+    const definition = this.findDefinitionLocation(objectName, propertyName);
+    if (!definition) {
+      console.warn(
+        `SailsCodeNavigator: definition not found for ${document.getText(
+          range
+        )}.`
+      );
+    }
+    return definition;
   }
 
   private getIdentifiersToDefine(
