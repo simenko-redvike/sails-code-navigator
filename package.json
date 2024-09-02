@@ -6,6 +6,10 @@
     "name": "Illia Simenko",
     "email": "illia.simenko@redvike.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simenko-redvike/sails-code-navigator"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.92.0"
