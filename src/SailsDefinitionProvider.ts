@@ -7,7 +7,6 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
   constructor(definitionPaths: Array<string>) {
     this.loadDefinitions(definitionPaths);
   }
-
   private definitionModules = new Map<string, string>();
   private isFallbackCheck = false;
 
@@ -30,6 +29,7 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
     if (defaultDefinitions && defaultDefinitions.length > 0) {
       return defaultDefinitions;
     }
+
     const customDefinition = this.findCustomDefinition(document, position);
 
     if (customDefinition) {
@@ -41,16 +41,25 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
     if (this.definitionModules.size > 0) {
       return;
     }
+    const workspaceFolder = vscode.workspace.workspaceFolders
+      ? vscode.workspace.workspaceFolders[0].uri.fsPath
+      : "";
+
     definitionPaths.forEach((definitionPath) => {
-      const directoryPath = path.join(
-        vscode.workspace.rootPath || "",
-        definitionPath
-      );
-      const definitionFiles = fs.readdirSync(directoryPath);
-      definitionFiles.forEach((file) => {
-        const moduleName = path.basename(file, ".js");
-        this.definitionModules.set(moduleName, path.join(directoryPath, file));
-      });
+      try {
+        const directoryPath = path.join(workspaceFolder, definitionPath);
+
+        const definitionFiles = fs.readdirSync(directoryPath);
+        definitionFiles.forEach((file) => {
+          const moduleName = path.basename(file, ".js");
+          this.definitionModules.set(
+            moduleName,
+            path.join(directoryPath, file)
+          );
+        });
+      } catch (e) {
+        console.error(e);
+      }
     });
   }
 
@@ -189,6 +198,8 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
             );
             return false;
           }
+
+          return this.traverse(path);
         },
       });
     } catch (e) {}
