@@ -1,7 +1,11 @@
 {
   "name": "sails-code-navigator",
-  "displayName": "sails-code-navigator",
-  "description": "The extension fixes code navigation issues caused by Sails globals feature",
+  "displayName": "Sails Code Navigator",
+  "description": "The extension fixes code navigation issues caused by Sails globals",
+  "author": {
+    "name": "Illia Simenko",
+    "email": "illia.simenko@redvike.com"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.92.0"
@@ -9,17 +13,32 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "sails",
+    "go to definition"
+  ],
   "main": "./out/extension.js",
   "activationEvents": [
     "onStartupFinished"
   ],
   "contributes": {
-    "commands": [
-      {
-        "command": "sails-code-navigator.helloWorld",
-        "title": "Hello World"
+    "configuration": {
+      "type": "object",
+      "title": "Sails Code Navigator Configuration",
+      "properties": {
+        "sailsCodeNavigator.definitionPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "./api/services",
+            "./api/models"
+          ],
+          "description": "An array of paths where the extension will search for files with definitions."
+        }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -43,5 +62,6 @@
   "dependencies": {
     "@babel/parser": "^7.25.6",
     "recast": "^0.23.9"
-  }
+  },
+  "license": "MIT"
 }
