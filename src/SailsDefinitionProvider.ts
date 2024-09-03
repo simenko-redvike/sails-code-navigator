@@ -25,12 +25,10 @@ export class SailsDefinitionProvider implements vscode.DefinitionProvider {
     >("vscode.executeDefinitionProvider", document.uri, position);
     this.isFallbackCheck = false;
 
-    // If a definition was found by the default provider, return it
-    if (defaultDefinitions && defaultDefinitions.length > 0) {
-      return defaultDefinitions;
-    }
-
-    return this.findCustomDefinition(document, position);
+    // If a definition was found by the default provider, return undefined to avoid duplicate results.
+    return defaultDefinitions?.length
+      ? undefined
+      : this.findCustomDefinition(document, position);
   }
 
   private loadDefinitions(definitionPaths: Array<string>) {
