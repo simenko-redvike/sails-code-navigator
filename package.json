@@ -2,16 +2,17 @@
   "name": "sails-code-navigator",
   "displayName": "Sails Code Navigator",
   "description": "The extension fixes code navigation issues caused by Sails globals",
+  "icon": "icon.png",
   "author": {
     "name": "Illia Simenko",
     "email": "illia.simenko@redvike.com"
   },
-  "publisher": "simenko-redvike",
+  "publisher": "simenko",
   "repository": {
     "type": "git",
     "url": "https://github.com/simenko-redvike/sails-code-navigator"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.92.0"
   },
